@@ -3,7 +3,9 @@ import Layout from './Layout/Layout';
 import Home from './pages/Home/Home';
 import Movies from './pages/Movies/Movies';
 import MovieDetails from './pages/MovieDetails/MovieDetails';
+import Cast from './pages/MovieDetails/Cast/Cast';
 import NotFound from './pages/NotFound/NotFound';
+import { Toaster } from 'react-hot-toast';
 // import { StyledLink } from './Layout/Layout.styled';
 
 export const App = () => {
@@ -21,8 +23,8 @@ export const App = () => {
           <Route path="movies" element={<Outlet />}>
             <Route index element={<Movies />} />
             <Route path=":movieId" element={<MovieDetails />}>
-              {/*    <Route path="cast" element={<Cast /> } />
-            <Route
+              <Route path="cast" element={<Cast />} />
+              {/*  <Route
               path="reviews "
               element={<Reviews /> }
             />*/}
@@ -32,6 +34,7 @@ export const App = () => {
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
+      <Toaster />
     </div>
   );
 };

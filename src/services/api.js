@@ -5,7 +5,7 @@ const API_KEY = 'a147bcd1e0cbe82e9bf9de24930f8c06';
 
 //Trends
 export async function fetchDBMoviesTrend() {
-  const res = await axios.get(`/trending/all/day`, {
+  const res = await axios.get(`/trending/all/week`, {
     params: {
       api_key: API_KEY,
     },
