@@ -2,8 +2,9 @@ import { fetchDBMoviesInfoReviews } from 'services/api';
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Loader from '../Loader/Loader';
+import { ErrorReviews, CloseBtn, Item, WrapperReviews } from './Reviews.styled';
 
-const Cast = () => {
+const Reviews = () => {
   const { movieId } = useParams();
 
   const [isLoading, setIsLoading] = useState(false);
@@ -33,24 +34,24 @@ const Cast = () => {
   return (
     <>
       {isLoading && <Loader />}
-      {error && <p>{error} </p>}
+      {error && <ErrorReviews>{error} </ErrorReviews>}
       {reviews.length > 0 && (
-        <>
-          <button type="button" onClick={() => navigate(-1)}>
+        <WrapperReviews>
+          <CloseBtn type="button" onClick={() => navigate(-1)}>
             Close
-          </button>
+          </CloseBtn>
           <ul>
             {reviews.map(({ id, author, content }) => (
-              <li key={id}>
+              <Item key={id}>
                 <h4>Author: {author}</h4>
                 <p>{content}</p>
-              </li>
+              </Item>
             ))}
           </ul>
-        </>
+        </WrapperReviews>
       )}
     </>
   );
 };
 
-export default Cast;
+export default Reviews;

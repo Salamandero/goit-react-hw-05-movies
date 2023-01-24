@@ -1,7 +1,7 @@
 import { fetchDBMoviesTrend } from 'services/api';
 import { useState, useEffect } from 'react';
 import Loader from '../../components/Loader/Loader';
-
+import { Title } from './Home.styled';
 import MovieList from '../../components/MovieList/MovieList';
 
 const Home = () => {
@@ -23,7 +23,7 @@ const Home = () => {
       {isLoading && <Loader />}
       {movies.length > 0 && (
         <>
-          <h3>Trending of the week</h3>
+          <Title>Trending of the week</Title>
           <MovieList movies={movies} />
         </>
       )}

@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useDebounce } from '../../hooks/useDebounce';
-import toast from 'react-hot-toast';
+// import toast from 'react-hot-toast';
+import PropTypes from 'prop-types';
 
 const DEBOUNCE_TIME = 250;
 
-const MovieSearch = ({ query, onSearch }) => {
+const MovieSearch = ({ query }) => {
+  // , onSearch
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchQuery, setSearchQuery] = useState(query);
   const debounceSearchQuery = useDebounce(searchQuery, DEBOUNCE_TIME);
@@ -19,18 +21,21 @@ const MovieSearch = ({ query, onSearch }) => {
     setSearchParams({ query: debounceSearchQuery });
   }, [setSearchParams, searchParams, debounceSearchQuery]);
 
-  const handleSubmit = e => {
-    e.preventDefault();
+  // const handleSubmit = e => {
+  //   e.preventDefault();
 
-    if (searchQuery.trim() && query === '') {
-      return toast.error('Write search movie');
-    }
-    onSearch(searchQuery);
-    setSearchQuery('');
-  };
+  //   if (searchQuery.trim() || query.trim() === '') {
+  //     return toast.error('Write search movie');
+  //   }
+  //   onSearch(searchQuery);
+  //   setSearchQuery('');
+  // };
+  console.log(query);
   return (
     <>
-      <form onSubmit={handleSubmit}>
+      <form
+      // onSubmit={handleSubmit}
+      >
         <input
           type="text"
           value={searchQuery}
@@ -39,12 +44,12 @@ const MovieSearch = ({ query, onSearch }) => {
           autoFocus
           placeholder="Write movie"
         />
-        <button type="submit">
-          <label>Search</label>
-        </button>
       </form>
     </>
   );
 };
 
+MovieSearch.propTypes = {
+  query: PropTypes.string.isRequired,
+};
 export default MovieSearch;

@@ -1,9 +1,18 @@
-import { Outlet, useParams, Link, useLocation } from 'react-router-dom';
+import { Outlet, useParams, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { fetchDBMoviesInfo } from 'services/api';
 import { Suspense } from 'react';
 import Loader from 'components/Loader/Loader';
 import noImg from '../../images/no_img.jpg';
+import {
+  ImgFilm,
+  WrapperFilm,
+  BackLink,
+  HeadText,
+  AddInfo,
+  AddInfoWrapper,
+  AddInfoLink,
+} from './MovieDetails.styled';
 
 const MovieDetails = () => {
   const { movieId } = useParams();
@@ -12,6 +21,7 @@ const MovieDetails = () => {
   const [error, setError] = useState(null);
   const location = useLocation();
   const backLinkHref = location.state?.from ?? '/movies';
+  const backLink = location.state?.from ?? '/';
 
   useEffect(() => {
     setIsLoading(true);
@@ -37,47 +47,51 @@ const MovieDetails = () => {
 
   return (
     <>
-      <Link to={backLinkHref}>Go back</Link>
+      <BackLink to={backLinkHref}>Go back</BackLink>
       {isLoading && <Loader />}
       {error && <p>{error} </p>}
 
       {!error && movieDet && (
         <div>
-          <div>
-            <img
+          <WrapperFilm>
+            <ImgFilm
               src={
                 movieDet.poster_path
                   ? `https://image.tmdb.org/t/p/w500${movieDet.poster_path}`
                   : noImg
               }
               alt={movieDet.title}
-              width={250}
               loading="lazy"
             />
-            <h3>
-              {movieDet.title} ({date})
-            </h3>
-
-            <p>User score: {average}%</p>
-            <h4>Overview</h4>
-            <p>{movieDet.overview}</p>
-            <h4>Genres</h4>
-            <p>{genresList}</p>
-          </div>
-          <div>
-            <p>Additional information</p>
+            <div>
+              <h2>
+                {movieDet.title} ({date})
+              </h2>
+              <p>User score: {average}%</p>
+              <HeadText>Overview</HeadText>
+              <p>{movieDet.overview}</p>
+              <HeadText>Genres</HeadText>
+              <p>{genresList}</p>
+            </div>
+          </WrapperFilm>
+          <AddInfoWrapper>
+            <AddInfo>Additional information</AddInfo>
             <ul>
               <li>
-                <Link to="cast">Cast</Link>
+                <AddInfoLink to="cast" state={{ from: backLink }}>
+                  Cast
+                </AddInfoLink>
               </li>
               <li>
-                <Link to="reviews">Reviews</Link>
+                <AddInfoLink to="reviews" state={{ from: backLink }}>
+                  Reviews
+                </AddInfoLink>
               </li>
             </ul>
             <Suspense fallback={<Loader />}>
               <Outlet />
             </Suspense>
-          </div>
+          </AddInfoWrapper>
         </div>
       )}
       <Outlet />

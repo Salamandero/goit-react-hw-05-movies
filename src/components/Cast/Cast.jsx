@@ -3,6 +3,13 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Loader from '../Loader/Loader';
 import noCastImg from '../../images/no_man.jpg';
+import {
+  ErrorCast,
+  CloseBtn,
+  ListCast,
+  ImgCast,
+  WrapperCast,
+} from './Cast.styled';
 
 const Cast = () => {
   const { movieId } = useParams();
@@ -34,16 +41,17 @@ const Cast = () => {
   return (
     <>
       {isLoading && <Loader />}
-      {error && <p>{error} </p>}
+      {error && <ErrorCast>{error} </ErrorCast>}
       {credits.length > 0 && (
-        <>
-          <button type="button" onClick={() => navigate(-1)}>
+        <WrapperCast>
+          <CloseBtn type="button" onClick={() => navigate(-1)}>
             Close
-          </button>
-          <ul>
+          </CloseBtn>
+
+          <ListCast>
             {credits.map(({ id, name, character, profile_path }) => (
               <li key={id}>
-                <img
+                <ImgCast
                   src={
                     profile_path
                       ? `https://image.tmdb.org/t/p/w300${profile_path}`
@@ -56,8 +64,8 @@ const Cast = () => {
                 {character && <p>Character: {character}</p>}
               </li>
             ))}
-          </ul>
-        </>
+          </ListCast>
+        </WrapperCast>
       )}
     </>
   );
