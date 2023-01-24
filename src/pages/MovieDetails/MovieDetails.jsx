@@ -1,50 +1,58 @@
 import { Outlet, useNavigate, useParams, Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { fetchDBMoviesInfo } from 'services/api';
+import Loader from 'components/Loader/Loader';
+import noImg from '../../images/no_img.jpg';
+// import Cast from '../../components/Cast/Cast';
 // import toast from 'react-hot-toast';
 
 const MovieDetails = () => {
   const { movieId } = useParams();
   const navigate = useNavigate();
   const [movieDet, setMovieDet] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   useEffect(() => {
-    if (!movieDet) {
-      return null;
-    }
-    async function getMoviesInfo() {
-      try {
-        const movieInfo = await fetchDBMoviesInfo(movieId);
-        return setMovieDet(movieInfo);
-      } catch (error) {
+    setIsLoading(true);
+    fetchDBMoviesInfo(Number(movieId))
+      .then(setMovieDet)
+      .catch(error => {
         setError(
           'Our Minions have hands on other side and can`t find information about this film'
         );
-      }
-    }
+        console.log(error);
+      })
+      .finally(setIsLoading(false));
 
-    getMoviesInfo();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [movieId]);
-  const average = Math.round(Number(movieDet.vote_average) * 10);
+  if (!movieDet) {
+    return null;
+  }
 
-  // const date = movieDet.release_date.slice(0, 4);
-  const date = movieDet.release_date;
-  // const genresList = movieDet.genres.map(genre => genre.name).join(', ');
-  const genresList = 'GENRES try another way, or lazy make!';
+  const average = Math.round(Number(movieDet?.vote_average) * 10);
+  const date = movieDet.release_date?.slice(0, 4);
+  const genresList = movieDet.genres?.map(genre => genre.name).join(', ');
+
   return (
     <>
       <button type="button" onClick={() => navigate(-1)}>
         Go back
       </button>
-      {error ? (
-        <p>{error} </p>
-      ) : (
+      {isLoading && <Loader />}
+      {error && <p>{error} </p>}
+
+      {!error && movieDet && (
         <div>
           <div>
             <img
-              src={`https://image.tmdb.org/t/p/w500${movieDet.backdrop_path}`}
+              src={
+                movieDet.poster_path
+                  ? `https://image.tmdb.org/t/p/w500${movieDet.poster_path}`
+                  : noImg
+              }
               alt={movieDet.title}
+              width={250}
               loading="lazy"
             />
             <h3>
@@ -64,9 +72,10 @@ const MovieDetails = () => {
                 <Link to={`cast`}>Cast</Link>
               </li>
               <li>
-                <Link to={`/movies/${movieId}/reviews`}>Reviews</Link>
+                <Link to={`reviews`}>Reviews</Link>
               </li>
             </ul>
+            <Outlet />
           </div>
         </div>
       )}
