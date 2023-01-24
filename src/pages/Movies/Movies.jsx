@@ -11,7 +11,6 @@ const Movies = () => {
   const [movies, setMovies] = useState([]);
   const query = searchParams.get('query') ?? '';
   const [isLoading, setIsLoading] = useState(false);
-  // const location = useLocation();
 
   useEffect(() => {
     if (!query) {

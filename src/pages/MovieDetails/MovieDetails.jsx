@@ -1,17 +1,18 @@
-import { Outlet, useNavigate, useParams, Link } from 'react-router-dom';
+import { Outlet, useParams, Link, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { fetchDBMoviesInfo } from 'services/api';
+import { Suspense } from 'react';
 import Loader from 'components/Loader/Loader';
 import noImg from '../../images/no_img.jpg';
-// import Cast from '../../components/Cast/Cast';
-// import toast from 'react-hot-toast';
 
 const MovieDetails = () => {
   const { movieId } = useParams();
-  const navigate = useNavigate();
   const [movieDet, setMovieDet] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const location = useLocation();
+  const backLinkHref = location.state?.from ?? '/movies';
+
   useEffect(() => {
     setIsLoading(true);
     fetchDBMoviesInfo(Number(movieId))
@@ -36,9 +37,7 @@ const MovieDetails = () => {
 
   return (
     <>
-      <button type="button" onClick={() => navigate(-1)}>
-        Go back
-      </button>
+      <Link to={backLinkHref}>Go back</Link>
       {isLoading && <Loader />}
       {error && <p>{error} </p>}
 
@@ -69,13 +68,15 @@ const MovieDetails = () => {
             <p>Additional information</p>
             <ul>
               <li>
-                <Link to={`cast`}>Cast</Link>
+                <Link to="cast">Cast</Link>
               </li>
               <li>
-                <Link to={`reviews`}>Reviews</Link>
+                <Link to="reviews">Reviews</Link>
               </li>
             </ul>
-            <Outlet />
+            <Suspense fallback={<Loader />}>
+              <Outlet />
+            </Suspense>
           </div>
         </div>
       )}
