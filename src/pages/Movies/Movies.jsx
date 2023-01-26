@@ -8,8 +8,7 @@ import Loader from 'components/Loader/Loader';
 import MovieList from '../../components/MovieList/MovieList';
 
 const Movies = () => {
-  const [searchParams] = useSearchParams();
-  // setSearchParams;
+  const [searchParams, setSearchParams] = useSearchParams();
   const [movies, setMovies] = useState([]);
   const query = searchParams.get('query') ?? '';
   const [isLoading, setIsLoading] = useState(false);
@@ -37,9 +36,9 @@ const Movies = () => {
     getSearchMovies();
   }, [query]);
 
-  // const onSubmit = value => {
-  //   setSearchParams({ query: `${value}` });
-  // };
+  const onSubmit = value => {
+    setSearchParams({ query: `${value}` });
+  };
   const proofMoviesList = () => {
     if (movies.length === 0 && query) {
       return true;
@@ -48,10 +47,7 @@ const Movies = () => {
   };
   return (
     <>
-      <MovieSearch
-        query={query}
-        // onSearch={onSubmit}
-      />
+      <MovieSearch query={query} onSearch={onSubmit} />
       {isLoading && <Loader />}
 
       {proofMoviesList() && <NoFoundInfo>Not found movie</NoFoundInfo>}

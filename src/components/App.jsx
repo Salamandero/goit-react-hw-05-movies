@@ -27,7 +27,7 @@ export const App = () => {
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
-      <Toaster />
+      <Toaster position="top-right" reverseOrder={false} />
     </div>
   );
 };
