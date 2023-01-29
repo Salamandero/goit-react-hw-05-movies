@@ -27,14 +27,18 @@ const Reviews = () => {
     return null;
   }
 
-  if (reviews.length === 0 || reviews.length === '') {
-    return <p>We don`t have any reviews for this movie</p>;
-  }
-
   return (
     <>
       {isLoading && <Loader />}
       {error && <ErrorReviews>{error} </ErrorReviews>}
+      {(reviews.length === 0 || reviews.length === '') && (
+        <WrapperReviews>
+          <CloseBtn type="button" onClick={() => navigate(-1)}>
+            Close
+          </CloseBtn>
+          <p>We don`t have any reviews for this movie</p>
+        </WrapperReviews>
+      )}
       {reviews.length > 0 && (
         <WrapperReviews>
           <CloseBtn type="button" onClick={() => navigate(-1)}>

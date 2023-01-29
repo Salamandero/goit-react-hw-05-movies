@@ -34,14 +34,18 @@ const Cast = () => {
     return null;
   }
 
-  if (credits.length === 0 || credits.length === '') {
-    return <p>We don`t have any casts for this movie</p>;
-  }
-
   return (
     <>
       {isLoading && <Loader />}
       {error && <ErrorCast>{error} </ErrorCast>}
+      {(credits.length === 0 || credits.length === '') && (
+        <WrapperCast>
+          <CloseBtn type="button" onClick={() => navigate(-1)}>
+            Close
+          </CloseBtn>
+          <p>We don`t have any reviews for this movie</p>
+        </WrapperCast>
+      )}
       {credits.length > 0 && (
         <WrapperCast>
           <CloseBtn type="button" onClick={() => navigate(-1)}>
